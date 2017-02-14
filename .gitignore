@@ -1,2 +1,5 @@
 # IDE
 /.idea/
+
+# log
+/npm-debug.log
