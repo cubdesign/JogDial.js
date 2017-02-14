@@ -6,6 +6,8 @@
   "scripts": {
     "start": "npm run watch & npm run server",
     "build": "rollup -c",
+    "lint": "eslint src/**",
+    "lint:fix": "eslint --fix src/**",
     "watch": "chokidar 'src/**' -c 'npm run build'",
     "server": "browser-sync start --files 'dist/*, index.html' --server"
   },
