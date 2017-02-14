@@ -1,12 +1,22 @@
 import JogDial from './jogDial'
 import $ from 'jquery'
-$(document).ready(() => {
+
+$(() => {
   // Example 1
-  new JogDial(document.getElementById('jog_dial_one'),
-    { wheelSize: '200px', knobSize: '70px', minDegree: 0, maxDegree: 360, degreeStartAt: 0 })
-    .on('mousemove', (evt) => {
-      $('#jog_dial_one_meter div').css('width', `${Math.round((evt.target.rotation / 360) * 100)}%`)
-    });
+  const jogDial_1 = new JogDial(
+    document.getElementById('jog_dial_one'),
+    {
+      wheelSize: '200px',
+      knobSize: '70px',
+      minDegree: 0,
+      maxDegree: 360,
+      degreeStartAt: 0
+    }
+  );
+
+  jogDial_1.on('mousemove', (evt) => {
+      $('#jog_dial_one_meter div').css('width', `${Math.round((evt.target.rotation / 360) * 100)}%`);
+  });
 
   // Example 2
   new JogDial(document.getElementById('jog_dial_two'),
