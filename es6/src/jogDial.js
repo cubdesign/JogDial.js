@@ -31,10 +31,10 @@ export default class JogDial {
     this.setInstance(element, options);
 
     // Set stage
-    this.setStage(this);
+    this.setStage();
 
     // Set events
-    this.setEvents(this);
+    this.setEvents();
 
     // Set angle
     this.angleTo(this, this.utils.convertClockToUnit(this.opt.degreeStartAt));
@@ -228,7 +228,7 @@ export default class JogDial {
   }
 
 
-  setInstance( el, opt) {
+  setInstance(el, opt) {
     this.base = el;
     this.base.setAttribute('_JogDial_', true);
     this.opt = this.utils.extend(this.utils.extend({}, this.Defaults), opt);
@@ -239,31 +239,31 @@ export default class JogDial {
     this.info.snapshot.direction = null;
   }
 
-  setStage(self) {
+  setStage() {
     /*
      * Create new elements
      * {HTMLElement}  JogDial.Instance.knob
      * {HTMLElement}  JogDial.Instance.wheel
      */
     const item = {};
-    const BId = self.base.getAttribute("id");
-    const BW = self.base.clientWidth;
-    const BH = self.base.clientHeight;
-    const opt = self.opt;
+    const BId = this.base.getAttribute("id");
+    const BW = this.base.clientWidth;
+    const BH = this.base.clientHeight;
+    const opt = this.opt;
     const K = item.knob = document.createElement('div');
     const W = item.wheel = document.createElement('div');
     const KS = K.style;
     const WS = W.style;
 
     //Set position property as relative if it's not predefined in Stylesheet
-    if (this.utils.getComputedStyle(self.base, 'position') === 'static') {
-      self.base.style.position = 'relative';
+    if (this.utils.getComputedStyle(this.base, 'position') === 'static') {
+      this.base.style.position = 'relative';
     }
 
     //Append to base and extend {object} item
-    self.base.appendChild(K);
-    self.base.appendChild(W);
-    this.utils.extend(self, item);
+    this.base.appendChild(K);
+    this.base.appendChild(W);
+    this.utils.extend(this, item);
 
     //Set global position and size
     KS.position = WS.position = 'absolute';
@@ -290,12 +290,12 @@ export default class JogDial {
     WS.zIndex = opt.zIndex;
 
     //set radius and center point value
-    self.radius = WRad - KRad;
-    self.center = { x: WRad + WMargnLT, y: WRad + WMargnTP };
+    this.radius = WRad - KRad;
+    this.center = { x: WRad + WMargnLT, y: WRad + WMargnTP };
 
     //Set debug mode
     if (opt.debug) {
-      this.setDebug(self);
+      this.setDebug(this);
     }
   }
 
@@ -312,7 +312,8 @@ export default class JogDial {
     KS.borderRadius = WS.borderRadius = "50%";
   }
 
-  setEvents(self) {
+  setEvents() {
+    const self = this;
     /*
      * Set events to control elements
      * {HTMLElement}  JogDial.Instance.knob
