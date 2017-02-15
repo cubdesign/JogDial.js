@@ -12,18 +12,24 @@ $(() => {
       degreeStartAt: 0
     }
   );
-
   jogDial_1.on('mousemove', (evt) => {
     $('#jog_dial_one_meter div').css('width', `${Math.round((evt.target.rotation / 360) * 100)}%`);
   });
 
   // Example 2
-  const jogDial_2 = new JogDial(document.getElementById('jog_dial_two'),
-    { debug: true, wheelSize: '260px', knobSize: '100px', degreeStartAt: 0 });
+  const jogDial_2 = new JogDial(
+    document.getElementById('jog_dial_two'),
+    {
+      debug: true,
+      wheelSize: '260px',
+      knobSize: '100px',
+      degreeStartAt: 0
+    }
+  );
 
   jogDial_2.on('mousemove', (evt) => {
       $('#jog_dial_two_meter').text(`Rotation:${Math.round(evt.target.rotation)} / Degree: ${Math.round(evt.target.degree)}`);
-    });
+  });
 
   $('.dial:nth-child(2)').css('opacity', 0);
 
@@ -38,13 +44,11 @@ $(() => {
         $('.dial').each(function(j) {
           if (i == j) {
             $(this).removeClass('hidden').css('opacity', 1);
-          }
-          else {
+          } else {
             $(this).addClass('hidden').css('opacity', 0);
           }
         })
-      }
-      else {
+      } else {
         $(this).removeClass('active');
       }
     })
