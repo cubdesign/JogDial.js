@@ -4,7 +4,6 @@ import riot from 'riot'
 import './app.tag'
 
 riot.mount('app');
-
 $(() => {
   // Example 1
   const jogDial_1 = new JogDial(
