@@ -1,6 +1,6 @@
 {
   "extends": ["eslint:recommended"],
-  "plugins": [],
+  "plugins": ["riot"],
   "parserOptions": {
     "sourceType": "module"
   },
