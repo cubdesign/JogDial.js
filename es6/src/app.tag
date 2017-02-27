@@ -3,7 +3,11 @@
 
     <div id="dials">
         <div class="dial">
-            <div id="jog_dial_one" ref="jog_dial_one"></div>
+            <jogdial
+                id="jog_dial_one"
+                ref="jog_dial_one"
+                onmousemove = {mousemove}
+            ></jogdial>
             <div id="jog_dial_one_meter">
                 <div></div>
             </div>
@@ -72,32 +76,23 @@
 
     </style>
     <script>
-      import JogDial from './jogDial'
+      import './jogdial.tag'
       import $ from 'jquery'
 
       this.on('mount', function() {
-        // right after the tag is mounted on the page
+      });
 
-        // Example 1
-        const jogDial_1 = new JogDial(
-          this.refs.jog_dial_one,
-          {
-            wheelSize: '200px',
-            knobSize: '70px',
-            minDegree: 0,
-            maxDegree: 360,
-            degreeStartAt: 0
-          }
-        );
-        jogDial_1.on('mousemove', (evt) => {
-          $('#jog_dial_one_meter div').css('width', `${Math.round((evt.target.rotation / 360) * 100)}%`);
-        });
+      mousemove(evt){
+        $('#jog_dial_one_meter div').css('width', `${Math.round((evt.target.rotation / 360) * 100)}%`);
+      }
 
-
-
-      })
-
-
+      riot.mount('jogdial', {
+        wheelSize: '200px',
+        knobSize: '70px',
+        minDegree: 0,
+        maxDegree: 360,
+        degreeStartAt: 0
+      });
 
     </script>
 </app>
