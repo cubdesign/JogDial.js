@@ -8,6 +8,13 @@
                 ref="jog_dial_one"
                 onmousemove = {mousemove}
                 debug = {false}
+                wheelsize ='200px'
+                knobsize = '70px'
+                mindegree= {0}
+                maxdegree= {360}
+                degreestartat= {0}
+
+
             ></jogdial>
             <div id="jog_dial_one_meter">
                 <div></div>
@@ -87,13 +94,7 @@
         $('#jog_dial_one_meter div').css('width', `${Math.round((evt.target.rotation / 360) * 100)}%`);
       }
 
-      riot.mount('jogdial', {
-        wheelSize: '200px',
-        knobSize: '70px',
-        minDegree: 0,
-        maxDegree: 360,
-        degreeStartAt: 0
-      });
+
 
     </script>
 </app>

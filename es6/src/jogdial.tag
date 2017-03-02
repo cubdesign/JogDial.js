@@ -37,16 +37,17 @@
     // Predefined options
     const defaults_opts = {
       debug: false,
-      touchMode: 'knob',  // knob | wheel
-      knobSize: '30%',
-      wheelSize: '100%',
-      zIndex: 9999,
-      degreeStartAt: 0,
-      minDegree: null,  // (null) infinity
-      maxDegree: null   // (null) infinity
+      touchmode: 'knob',  // knob | wheel
+      knobsize: '30%',
+      wheelsize: '100%',
+      zindex: 9999,
+      degreestartat: 0,
+      mindegree: null,  // (null) infinity
+      maxdegree: null   // (null) infinity
     };
 
     opts = Object.assign(defaults_opts, opts);
+
 
     // Predefined rotation info
     const DegInfo = {
@@ -73,9 +74,8 @@
       if (this.getComputedStyle(root, 'position') === 'static') {
         root.style.position = 'relative';
       }
-
-      knob.setSize(opts.knobSize);
-      wheel.setSize(opts.wheelSize);
+      knob.setSize(opts.knobsize);
+      wheel.setSize(opts.wheelsize);
 
       //Set radius value
       const KRad = knob.root.clientWidth / 2;
@@ -83,7 +83,7 @@
 
       //Set knob properties
       knob.root.style.margin = `${-KRad}px 0 0 ${-KRad}px`;
-      knob.root.style.zIndex = opts.zIndex;
+      knob.root.style.zIndex = opts.zindex;
 
       //Set wheel properties
 
@@ -93,7 +93,7 @@
 
 
       wheel.root.style.margin = `${WMargnTP}px 0 0 ${WMargnLT}px`;
-      wheel.root.style.zIndex = opts.zIndex;
+      wheel.root.style.zIndex = opts.zindex;
 
       //set radius and center point value
       this.radius = WRad - KRad;
@@ -111,7 +111,7 @@
       wheel.on(DomEvent.MOUSE_OUT, this.mouseUpEvent.bind(this));
 
       // Set angle
-      this.angleTo(this.convertClockToUnit(opts.degreeStartAt));
+      this.angleTo(this.convertClockToUnit(opts.degreestartat));
 
     });
 
@@ -124,7 +124,7 @@
 
       console.log("mouseDownEvent");
 
-      switch (opts.touchMode) {
+      switch (opts.touchmode) {
         case 'knob':
         default:
           this.pressed = this.checkBoxCollision(
@@ -177,23 +177,23 @@
 
 
 
-        if (opts.maxDegree != null && opts.maxDegree <= rotation) {
+        if (opts.maxDegree != null && opts.maxdegree <= rotation) {
           if (info.snapshot.direction == null) {
             info.snapshot.direction = 'right';
             info.snapshot.now = Object.assign({}, info.now);
             info.snapshot.old = Object.assign({}, info.old);
           }
-          rotation = opts.maxDegree;
+          rotation = opts.maxdegree;
           radian = this.convertClockToUnit(rotation);
           degree = this.convertUnitToClock(radian);
         }
-        else if (opts.minDegree != null && opts.minDegree >= rotation) {
+        else if (opts.mindegree != null && opts.mindegree >= rotation) {
           if (info.snapshot.direction == null) {
             info.snapshot.direction = 'left';
             info.snapshot.now = Object.assign({}, info.now);
             info.snapshot.old = Object.assign({}, info.old);
           }
-          rotation = opts.minDegree;
+          rotation = opts.mindegree;
           radian = this.convertClockToUnit(rotation);
           degree = this.convertUnitToClock(radian);
         }
@@ -250,7 +250,7 @@
       if (knob.rotation == undefined) {
         // Update JogDial data information
         Object.assign(knob, {
-          rotation: opts.degreeStartAt,
+          rotation: opts.degreestartat,
           degree: this.convertUnitToClock(radian)
         });
       }
