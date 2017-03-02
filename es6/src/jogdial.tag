@@ -5,14 +5,23 @@
 * Licensed under the MIT license
 */
 <jogdial>
-  <knob ref="knob"></knob>
-  <wheel ref="wheel"></wheel>
+  <knob
+    ref="knob"
+    id="{opts.id}_knob"
+    debug = {opts.debug}
+  ></knob>
+  <wheel
+    ref="wheel"
+    id="{opts.id}_wheel"
+    debug = {opts.debug}
+  ></wheel>
+
   <style>
     jogdial{
       display: block;
     }
-
   </style>
+
   <script>
     import './knob.tag';
     import './wheel.tag';
@@ -25,98 +34,74 @@
     const MobileRegEx = '/Mobile|iP(hone|od|ad)|Android|BlackBerry|IEMobile|Kindle|NetFront|Silk-Accelerated|(hpw|web)OS|Fennec|Minimo|Opera M(obi|ini)|Blazer|Dolfin|Dolphin|Skyfire|Zune/';
     const MobileEvent = ('ontouchstart' in window) && window.navigator.userAgent.match(MobileRegEx);
 
-    this.on('mount', function() {
-      this.init();
-    });
+    // Predefined options
+    const defaults_opts = {
+      debug: false,
+      touchMode: 'knob',  // knob | wheel
+      knobSize: '30%',
+      wheelSize: '100%',
+      zIndex: 9999,
+      degreeStartAt: 0,
+      minDegree: null,  // (null) infinity
+      maxDegree: null   // (null) infinity
+    };
 
-    init(){
-      const {knob, wheel} = this.refs;
-      const root = this.root;
+    opts = Object.assign(defaults_opts, opts);
 
-      //    return new JogDial.Instance(element, options || {});
+    // Predefined rotation info
+    const DegInfo = {
+      rotation: 0,
+      quadrant: 1
+    };
 
-      // Predefined options
-      const Defaults = {
-        debug: false,
-        touchMode: 'knob',  // knob | wheel
-        knobSize: '30%',
-        wheelSize: '100%',
-        zIndex: 9999,
-        degreeStartAt: 0,
-        minDegree: null,  // (null) infinity
-        maxDegree: null   // (null) infinity
-      };
-
-      // Predefined rotation info
-      const DegInfo = {
-        rotation: 0,
-        quadrant: 1
-      };
-
-      this.opt = Object.assign(Defaults, this.opts);
-      this.info = {
+    this.info = {
+      now : Object.assign({}, DegInfo),
+      old : Object.assign({}, DegInfo),
+      snapshot : {
         now : Object.assign({}, DegInfo),
         old : Object.assign({}, DegInfo),
-        snapshot : {
-          now : Object.assign({}, DegInfo),
-          old : Object.assign({}, DegInfo),
-          direction : null,
-        }
-      };
+        direction : null,
+      }
+    };
 
 
-      const opt = this.opt;
-
-
+    this.on('mount', function() {
+      const {knob, wheel} = this.refs;
+      const root = this.root;
 
       //Set position property as relative if it's not predefined in Stylesheet
       if (this.getComputedStyle(root, 'position') === 'static') {
         root.style.position = 'relative';
       }
 
-      knob.setSize(opt.knobSize);
-      wheel.setSize(opt.wheelSize);
+      knob.setSize(opts.knobSize);
+      wheel.setSize(opts.wheelSize);
 
       //Set radius value
       const KRad = knob.root.clientWidth / 2;
       const WRad = wheel.root.clientWidth / 2;
 
       //Set knob properties
-      knob.root.setAttribute('id', `${this.opts.id}_knob`);
       knob.root.style.margin = `${-KRad}px 0 0 ${-KRad}px`;
-      knob.root.style.zIndex = opt.zIndex;
+      knob.root.style.zIndex = opts.zIndex;
 
       //Set wheel properties
-      wheel.root.setAttribute('id', `${this.opts.id}_wheel`);
+
 
       const WMargnLT = (root.clientWidth - wheel.root.clientWidth) / 2;
       const WMargnTP = (root.clientHeight - wheel.root.clientHeight) / 2;
 
-      wheel.root.style.left = 0;
-      wheel.root.style.top = 0;
+
       wheel.root.style.margin = `${WMargnTP}px 0 0 ${WMargnLT}px`;
-      wheel.root.style.zIndex = opt.zIndex;
+      wheel.root.style.zIndex = opts.zIndex;
 
       //set radius and center point value
       this.radius = WRad - KRad;
-      this.center = { x: WRad + WMargnLT, y: WRad + WMargnTP };
+      this.center = {
+        x: WRad + WMargnLT,
+        y: WRad + WMargnTP
+      };
 
-
-      //Set debug mode
-      if (opt.debug) {
-        knob.root.style.backgroundColor = '#00F';
-        wheel.root.style.backgroundColor = '#0F0';
-        knob.root.style.opacity = .4;
-        wheel.root.style.opacity = .4;
-        knob.root.style.filter = 'progid:DXImageTransform.Microsoft.Alpha(Opacity=40)';
-        wheel.root.style.filter = 'progid:DXImageTransform.Microsoft.Alpha(Opacity=40)';
-
-        //Fancy CSS3 for debug
-        knob.root.style.webkitBorderRadius = "50%";
-        wheel.root.style.webkitBorderRadius = "50%";
-        knob.root.style.borderRadius = "50%";
-        wheel.root.style.borderRadius = "50%";
-      }
 
       this.pressed = false;
 
@@ -126,29 +111,31 @@
       wheel.on(DomEvent.MOUSE_OUT, this.mouseUpEvent.bind(this));
 
       // Set angle
-      this.angleTo(this, this.convertClockToUnit(this.opt.degreeStartAt));
+      this.angleTo(this.convertClockToUnit(opts.degreeStartAt));
 
-    }
-
-    this.on('angle', function() {
-      this.angleTo(this, data);
     });
 
-    angle(data) {
-      this.angleTo(this, this.convertClockToUnit(data));
+    angle(data){
+      this.angleTo(this.convertClockToUnit(data));
     }
+
     mouseDownEvent(e){
       const {knob, wheel} = this.refs;
+
       console.log("mouseDownEvent");
-      switch (this.opt.touchMode) {
+
+      switch (opts.touchMode) {
         case 'knob':
         default:
-          this.pressed = this.checkBoxCollision({
-            x1: knob.root.offsetLeft - wheel.root.offsetLeft,
-            y1: knob.root.offsetTop - wheel.root.offsetTop,
-            x2: knob.root.offsetLeft - wheel.root.offsetLeft + knob.root.clientWidth,
-            y2: knob.root.offsetTop - wheel.root.offsetTop + knob.root.clientHeight
-          }, this.getCoordinates(e));
+          this.pressed = this.checkBoxCollision(
+            {
+                x1: knob.root.offsetLeft - wheel.root.offsetLeft,
+                y1: knob.root.offsetTop - wheel.root.offsetTop,
+                x2: knob.root.offsetLeft - wheel.root.offsetLeft + knob.root.clientWidth,
+                y2: knob.root.offsetTop - wheel.root.offsetTop + knob.root.clientHeight
+            },
+            this.getCoordinates(e)
+          );
           break;
         case 'wheel':
           this.pressed = true;
@@ -170,11 +157,11 @@
       const info = this.info;
 
       console.log("mouseDragEvent");
+
       if (this.pressed) {
         // Prevent default event
         (e.preventDefault) ? e.preventDefault() : e.returnValue = false;
 
-        // var info = self.info, opt = self.opt,
         const offset = this.getCoordinates(e);
         const _x = offset.x - this.center.x + wheel.root.offsetLeft;
         const _y = offset.y - this.center.y + wheel.root.offsetTop;
@@ -184,29 +171,29 @@
         let rotation;
 
         //Calculate the current rotation value based on pointer offset
-        info.now.rotation = this.getRotation(self, (quadrant == undefined) ? info.old.quadrant : quadrant, degree);
+        info.now.rotation = this.getRotation((quadrant == undefined) ? info.old.quadrant : quadrant, degree);
 
         rotation = info.now.rotation;//Math.ceil(info.now.rotation);
 
 
 
-        if (this.opt.maxDegree != null && this.opt.maxDegree <= rotation) {
+        if (opts.maxDegree != null && opts.maxDegree <= rotation) {
           if (info.snapshot.direction == null) {
             info.snapshot.direction = 'right';
             info.snapshot.now = Object.assign({}, info.now);
             info.snapshot.old = Object.assign({}, info.old);
           }
-          rotation = this.opt.maxDegree;
+          rotation = opts.maxDegree;
           radian = this.convertClockToUnit(rotation);
           degree = this.convertUnitToClock(radian);
         }
-        else if (this.opt.minDegree != null && this.opt.minDegree >= rotation) {
+        else if (opts.minDegree != null && opts.minDegree >= rotation) {
           if (info.snapshot.direction == null) {
             info.snapshot.direction = 'left';
             info.snapshot.now = Object.assign({}, info.now);
             info.snapshot.old = Object.assign({}, info.old);
           }
-          rotation = this.opt.minDegree;
+          rotation = opts.minDegree;
           radian = this.convertClockToUnit(rotation);
           degree = this.convertUnitToClock(radian);
         }
@@ -221,7 +208,7 @@
         });
 
         // update angle
-        this.angleTo(this, radian);
+        this.angleTo( radian);
       }
     }
 
@@ -230,6 +217,7 @@
       console.log("mouseUpEvent");
       const {knob, wheel} = this.refs;
       const info = this.info;
+
       if (this.pressed) {
         this.pressed = false;
         if (info.snapshot.direction != null) {
@@ -245,17 +233,16 @@
 
     /*
      * Function
-     * @param  {HTMLElement}    self
      * @param  {String}         radian
      */
-    angleTo(self, radian) {
+    angleTo(radian){
       const {knob, wheel} = this.refs;
       const root = this.root;
 
       radian *= ToRad;
 
       const _x = Math.cos(radian) * this.radius + this.center.x;
-      const _y = Math.sin(radian) * this.radius + self.center.y;
+      const _y = Math.sin(radian) * this.radius + this.center.y;
 
       knob.root.style.left = `${_x}px`;
       knob.root.style.top = `${_y}px`;
@@ -263,7 +250,7 @@
       if (knob.rotation == undefined) {
         // Update JogDial data information
         Object.assign(knob, {
-          rotation: this.opt.degreeStartAt,
+          rotation: opts.degreeStartAt,
           degree: this.convertUnitToClock(radian)
         });
       }
@@ -295,7 +282,7 @@
     }
 
     // Returne the sum of rotation value
-    getRotation(self, quadrant, newDegree){
+    getRotation(quadrant, newDegree){
       const info = this.info;
       let delta = 0;
       if (quadrant == 1 && info.old.quadrant == 2) { //From 360 to 0

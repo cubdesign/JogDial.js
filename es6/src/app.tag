@@ -7,6 +7,7 @@
                 id="jog_dial_one"
                 ref="jog_dial_one"
                 onmousemove = {mousemove}
+                debug = {false}
             ></jogdial>
             <div id="jog_dial_one_meter">
                 <div></div>

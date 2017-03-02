@@ -1,9 +1,25 @@
-<wheel>
-    <style>
+<wheel class={debug: debug }>
+    <style type='scss'>
+
         wheel{
             display: block;
             position:absolute;
+            left : 0;
+            top : 0;
+            &.debug{
+                background : #0F0 ;
+                opacity : .4;
+                filter : 'progid:DXImageTransform.Microsoft.Alpha(Opacity=40)';
+
+            // Fancy CSS3 for debug
+
+            -webkit-border-radius  : 50%;
+                border-radius : 50%;
+            }
         }
+
+
+
     </style>
     <script>
 
@@ -11,7 +27,11 @@
 
       riot.observable(this.root);
 
+      this.debug = Boolean(opts.debug);
       this.on("mount", function(){
+
+
+
         this.root.addEventListener(DomEvent.MOUSE_DOWN, this.mouse_down);
         this.root.addEventListener(DomEvent.MOUSE_MOVE, this.mouse_move);
         this.root.addEventListener(DomEvent.MOUSE_UP, this.mouse_up);
