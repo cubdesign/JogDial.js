@@ -4,17 +4,15 @@
     <div id="dials">
         <div class="dial">
             <jogdial
-                id="jog_dial_one"
-                ref="jog_dial_one"
-                onmousemove = {mousemove}
-                debug = {false}
-                wheelsize ='200px'
-                knobsize = '70px'
-                mindegree= {0}
-                maxdegree= {360}
-                degreestartat= {0}
-
-
+                    id="jog_dial_one"
+                    ref="jog_dial_one"
+                    onmousemove={mousemove}
+                    debug={false}
+                    wheelsize='200px'
+                    knobsize='70px'
+                    mindegree={0}
+                    maxdegree={360}
+                    degreestartat={0}
             ></jogdial>
             <div id="jog_dial_one_meter">
                 <div></div>
@@ -30,6 +28,7 @@
             padding: 15px 5px 25px;
             background: #eee;
         }
+
         .inline {
             display: inline-block;
         }
@@ -74,6 +73,7 @@
             -o-border-radius: 5px;
             border-radius: 5px;
         }
+
         #jog_dial_one_meter div {
             position: relative;
             width: 0;
@@ -90,10 +90,9 @@
       this.on('mount', function() {
       });
 
-      mousemove(evt){
+      this.mousemove = (evt) => {
         $('#jog_dial_one_meter div').css('width', `${Math.round((evt.target.rotation / 360) * 100)}%`);
       }
-
 
 
     </script>

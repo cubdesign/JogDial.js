@@ -21,7 +21,7 @@
       this.on("mount", function() {
 
       });
-      setSize(size){
+      this.setSize = (size) => {
         this.root.style.width = size;
         this.root.style.height = size;
       }
