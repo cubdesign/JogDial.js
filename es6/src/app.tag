@@ -84,10 +84,11 @@
 
     </style>
     <script>
-      import './jogdial.tag'
+      import './components/jogdial.tag'
       import $ from 'jquery'
 
       this.on('mount', function() {
+
       });
 
       this.mousemove = (evt) => {

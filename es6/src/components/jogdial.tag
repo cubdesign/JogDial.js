@@ -9,11 +9,13 @@
             ref="knob"
             id="{opts.id}_knob"
             debug={opts.debug}
+            zindex={opts.zindex}
     ></knob>
     <wheel
             ref="wheel"
             id="{opts.id}_wheel"
             debug={opts.debug}
+            zindex={opts.zindex}
     ></wheel>
 
     <style>
@@ -25,14 +27,12 @@
     <script>
       import './knob.tag';
       import './wheel.tag';
-      import DomEvent from './events/domevent'
-      import CustomEvent from './events/customevent'
+      import DomEvent from '../events/domevent'
+      import CustomEvent from '../events/customevent'
+      import MobileEvent from '../events/mobileevent'
 
       const ToRad = Math.PI / 180;
       const ToDeg = 180 / Math.PI;
-
-      const MobileRegEx = '/Mobile|iP(hone|od|ad)|Android|BlackBerry|IEMobile|Kindle|NetFront|Silk-Accelerated|(hpw|web)OS|Fennec|Minimo|Opera M(obi|ini)|Blazer|Dolfin|Dolphin|Skyfire|Zune/';
-      const MobileEvent = ('ontouchstart' in window) && window.navigator.userAgent.match(MobileRegEx);
 
       // Predefined options
       const defaults_opts = {
@@ -46,6 +46,8 @@
         maxdegree: null   // (null) infinity
       };
 
+      console.log(0);
+      console.log(opts);
       opts = Object.assign(defaults_opts, opts);
 
 
@@ -65,7 +67,8 @@
         }
       };
 
-
+      console.log(1);
+      console.log(opts);
       this.on('mount', function() {
         const { knob, wheel } = this.refs;
         const root = this.root;
@@ -83,7 +86,7 @@
 
         //Set knob properties
         knob.root.style.margin = `${-KRad}px 0 0 ${-KRad}px`;
-        knob.root.style.zIndex = opts.zindex;
+
 
         //Set wheel properties
 
@@ -93,7 +96,7 @@
 
 
         wheel.root.style.margin = `${WMargnTP}px 0 0 ${WMargnLT}px`;
-        wheel.root.style.zIndex = opts.zindex;
+
 
         //set radius and center point value
         this.radius = WRad - KRad;
@@ -113,6 +116,8 @@
         // Set angle
         this.angleTo(this.convertClockToUnit(opts.degreestartat));
 
+        console.log(2);
+        console.log(opts);
       });
 
       this.angle = (data) => {
