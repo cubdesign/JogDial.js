@@ -20,21 +20,39 @@
 
     </style>
     <script>
-      this.debug = Boolean(opts.debug);
 
-      console.log(10);
-      console.log(opts);
+        /* Assign this to tag */
 
-      this.on("mount", function() {
+        const tag = this;
 
-        console.log(20);
-        console.log(opts);
+        const onMount = () => {
+          tag.root.style.zIndex = opts.zindex;
+        };
 
-        this.root.style.zIndex = opts.zindex;
-      });
-      this.setSize = (size) => {
-        this.root.style.width = size;
-        this.root.style.height = size;
-      }
+        const setSize = (size) => {
+          tag.root.style.width = size;
+          tag.root.style.height = size;
+        }
+
+
+
+        /*
+         tag properties
+
+         opts
+            debug
+            id_name
+
+         */
+
+        // opt
+        tag.debug = Boolean(opts.debug);
+        tag.id_name = 'jogdial_2';
+
+        // method
+        tag.setSize = setSize;
+
+        // event listener
+        tag.on('mount', onMount);
     </script>
 </knob>

@@ -1,4 +1,7 @@
 <wheel class={debug: debug }>
+    <script>
+      import DomEvent from '../events/domevent'
+    </script>
     <style type='scss'>
 
         wheel{
@@ -24,44 +27,73 @@
     </style>
     <script>
 
-      import DomEvent from '../events/domevent'
 
-      riot.observable(this.root);
+      /* Assign this to tag */
 
-      this.debug = Boolean(opts.debug);
+      const tag = this;
 
-      this.on("mount", function(){
-        this.root.style.zIndex = opts.zindex;
+      riot.observable(tag.root);
 
-        this.root.addEventListener(DomEvent.MOUSE_DOWN, this.mouse_down);
-        this.root.addEventListener(DomEvent.MOUSE_MOVE, this.mouse_move);
-        this.root.addEventListener(DomEvent.MOUSE_UP, this.mouse_up);
-        this.root.addEventListener(DomEvent.MOUSE_OUT, this.mouse_out);
-      })
 
-      this.on("unmount", function(){
-        this.root.removeListener(DomEvent.MOUSE_DOWN, this.mouse_down);
-        this.root.removeListener(DomEvent.MOUSE_MOVE, this.mouse_move);
-        this.root.removeListener(DomEvent.MOUSE_UP, this.mouse_up);
-        this.root.removeListener(DomEvent.MOUSE_OUT, this.mouse_out);
-      })
+      const onMount = () => {
+        tag.root.style.zIndex = opts.zindex;
 
-      this.mouse_down = (e) => {
-        this.trigger(DomEvent.MOUSE_DOWN, e);
+        tag.root.addEventListener(DomEvent.MOUSE_DOWN, tag.mouse_down);
+        tag.root.addEventListener(DomEvent.MOUSE_MOVE, tag.mouse_move);
+        tag.root.addEventListener(DomEvent.MOUSE_UP, tag.mouse_up);
+        tag.root.addEventListener(DomEvent.MOUSE_OUT, tag.mouse_out);
+      };
+
+      const onUnMount = () => {
+        tag.root.removeListener(DomEvent.MOUSE_DOWN, tag.mouse_down);
+        tag.root.removeListener(DomEvent.MOUSE_MOVE, tag.mouse_move);
+        tag.root.removeListener(DomEvent.MOUSE_UP, tag.mouse_up);
+        tag.root.removeListener(DomEvent.MOUSE_OUT, tag.mouse_out);
+      };
+
+      const mouse_down = (e) => {
+        tag.trigger(DomEvent.MOUSE_DOWN, e);
       }
-      this.mouse_move = (e) => {
-        this.trigger(DomEvent.MOUSE_MOVE, e);
+      const mouse_move = (e) => {
+        tag.trigger(DomEvent.MOUSE_MOVE, e);
       }
-      this.mouse_up = (e) => {
-        this.trigger(DomEvent.MOUSE_UP ,e);
+      const mouse_up = (e) => {
+        tag.trigger(DomEvent.MOUSE_UP ,e);
       }
-      this.mouse_out = (e) => {
-        this.trigger(DomEvent.MOUSE_OUT ,e);
+      const mouse_out = (e) => {
+        tag.trigger(DomEvent.MOUSE_OUT ,e);
       }
 
-      this.setSize = (size) => {
-        this.root.style.width = size;
-        this.root.style.height = size;
+      const setSize = (size) => {
+        tag.root.style.width = size;
+        tag.root.style.height = size;
       }
+
+      /*
+       tag properties
+
+       opts
+       debug
+       id_name
+
+       */
+
+      // opt
+      tag.debug = Boolean(opts.debug);
+      tag.id_name = 'jogdial_2';
+
+
+      // method
+      tag.mouse_down = mouse_down;
+      tag.mouse_move = mouse_move;
+      tag.mouse_up = mouse_up;
+      tag.mouse_out = mouse_out;
+
+      tag.setSize = setSize;
+
+
+      // event listener
+      tag.on('mount', onMount);
+      tag.on('unmount', onUnMount);
     </script>
 </wheel>
