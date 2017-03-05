@@ -1,10 +1,17 @@
-/*
-* JogDial.js - v 1.0
-*
-* Copyright (c) 2014 Sean Oh (ohsiwon@gmail.com)
-* Licensed under the MIT license
-*/
 <jogdial>
+    <script>
+        /*
+         * JogDial.js - v 1.0
+         *
+         * Copyright (c) 2014 Sean Oh (ohsiwon@gmail.com)
+         * Licensed under the MIT license
+         */
+        import './knob.tag.html';
+        import './wheel.tag.html';
+        import DomEvent from '../events/domevent'
+        import CustomEvent from '../events/customevent'
+        import MobileEvent from '../events/mobileevent'
+    </script>
     <knob
             ref="knob"
             id="{id_name}_knob"
@@ -25,11 +32,6 @@
     </style>
 
     <script>
-      import './knob.tag.html';
-      import './wheel.tag.html';
-      import DomEvent from '../events/domevent'
-      import CustomEvent from '../events/customevent'
-      import MobileEvent from '../events/mobileevent'
 
       /* constant */
 

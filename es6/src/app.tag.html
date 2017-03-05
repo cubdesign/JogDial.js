@@ -1,4 +1,9 @@
 <app>
+    <script>
+      import './components/jogdial.tag.html'
+      import './components/jogdial-meter.tag.html'
+      import DomEvent from './events/domevent'
+    </script>
     <h1>JogDial.js</h1>
 
     <div id="dials">
@@ -7,7 +12,6 @@
                 id="jog_dial_one"
                 ref="jog_dial_one"
                 id_name="jog_dial_one"
-                onmousemove={mousemove}
                 debug={false}
                 wheelsize={'200px'}
                 knobsize={'70px'}
@@ -15,9 +19,11 @@
                 maxdegree={360}
                 degreestartat={0}
             ></jogdial>
-            <div id="jog_dial_one_meter">
-                <div></div>
-            </div>
+            <jogdial-meter
+                id="jog_dial_one_meter"
+                ref="jog_dial_one_meter"
+            >
+            </jogdial-meter>
         </div>
     </div>
     <style>
@@ -62,39 +68,34 @@
             background: url('../assets/img/base_one_knob.png?1392325228');
         }
 
-        #jog_dial_one_meter {
-            width: 200px;
-            height: 10px;
-            margin: 20px auto 30px;
-            background: #999;
-            overflow: hidden;
-            -webkit-border-radius: 5px;
-            -moz-border-radius: 5px;
-            -ms-border-radius: 5px;
-            -o-border-radius: 5px;
-            border-radius: 5px;
-        }
-
-        #jog_dial_one_meter div {
-            position: relative;
-            width: 0;
-            height: 100%;
-            background: #80e93a;
-        }
 
 
     </style>
     <script>
-      import './components/jogdial.tag.html'
-      import $ from 'jquery'
+    /* Assign this to tag */
 
-      this.on('mount', function() {
+    const tag = this;
 
-      });
 
-      this.mousemove = (evt) => {
-        $('#jog_dial_one_meter div').css('width', `${Math.round((evt.target.rotation / 360) * 100)}%`);
-      }
+    const onWheelMouseMoveEvent = (ev) => {
+      const { jog_dial_one, jog_dial_one_meter } = tag.refs;
+      const rotation_parsent = `${Math.round((jog_dial_one.refs.knob.rotation / 360) * 100)}%`;
+      jog_dial_one_meter.root.style.width = rotation_parsent;
+    }
+
+    const onMount = () => {
+      const { jog_dial_one } = tag.refs;
+      jog_dial_one.root.addEventListener(DomEvent.MOUSE_MOVE, onWheelMouseMoveEvent);
+    }
+
+    const onUnMount = () => {
+      const { jog_dial_one } = tag.refs;
+      jog_dial_one.root.removeEventListener(DomEvent.MOUSE_MOVE, onWheelMouseMoveEvent);
+    }
+
+    tag.on('mount', onMount);
+    tag.on('unmount', onUnMount);
+
 
 
     </script>
