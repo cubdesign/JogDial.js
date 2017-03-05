@@ -156,8 +156,7 @@
 
           rotation = info.now.rotation;//Math.ceil(info.now.rotation);
 
-
-          if (tag.maxDegree != null && tag.maxdegree <= rotation) {
+          if (tag.maxdegree != null && tag.maxdegree <= rotation) {
             if (info.snapshot.direction == null) {
               info.snapshot.direction = 'right';
               info.snapshot.now = Object.assign({}, info.now);
@@ -218,12 +217,17 @@
 
         tag.id_name = opts.id_name || tag.id_name;
         tag.debug = opts.debug || tag.debug;
-        tag.touchmode = opts.touchmode || tag.touchmode;
         tag.knobsize = opts.knobsize || tag.knobsize;
         tag.wheelsize = opts.wheelsize || tag.wheelsize;
         tag.zindex = opts.zindex || tag.zindex;
         tag.degreestartat = opts.degreestartat || tag.degreestartat;
-        tag.mindegree = opts.mindegree || tag.mindegree;
+
+        if(opts.mindegree === 0) {
+          tag.mindegree = 0;
+        }else {
+          tag.mindegree = opts.mindegree || tag.mindegree;
+        }
+
         tag.maxdegree = opts.maxdegree || tag.maxdegree;
 
       }
@@ -319,7 +323,6 @@
        opts
        id_name
        debug
-       touchmode
        knobsize
        wheelsize
        zindex
@@ -331,7 +334,6 @@
       // opt
       tag.id_name = 'jogdial_2';
       tag.debug = false;
-      tag.touchmode = 'knob';  // knob | wheel
       tag.knobsize = '30%';
       tag.wheelsize = '100%';
       tag.zindex = 9999;
@@ -340,6 +342,7 @@
       tag.maxdegree = null;   // (null) infinity
 
       // other
+      tag.touchmode = 'knob';  // knob | wheel
 
       tag.info = {
         now: Object.assign({}, DegInfo),
