@@ -16,18 +16,21 @@
             ref="knob"
             id="{id_name}_knob"
             debug={debug}
-            zindex={zindex}
+            size={knobsize}
+            zindex={zindex - 1}
     ></knob>
     <wheel
             ref="wheel"
             id="{id_name}_wheel"
             debug={debug}
+            size={wheelsize}
             zindex={zindex}
     ></wheel>
 
     <style>
         jogdial {
             display: block;
+            position:relative;
         }
     </style>
 
@@ -57,23 +60,11 @@
         const { knob, wheel } = tag.refs;
         const root = tag.root;
 
-        //Set position property as relative if it's not predefined in Stylesheet
-        if (tag.getComputedStyle(root, 'position') === 'static') {
-          root.style.position = 'relative';
-        }
-
-        knob.setSize(this.knobsize);
-        wheel.setSize(this.wheelsize);
-
         //Set radius value
         const KRad = knob.root.clientWidth / 2;
         const WRad = wheel.root.clientWidth / 2;
 
-        //Set knob properties
-        knob.root.style.margin = `${-KRad}px 0 0 ${-KRad}px`;
-
         //Set wheel properties
-
 
         const WMargnLT = (root.clientWidth - wheel.root.clientWidth) / 2;
         const WMargnTP = (root.clientHeight - wheel.root.clientHeight) / 2;
@@ -220,7 +211,13 @@
         tag.knobsize = opts.knobsize || tag.knobsize;
         tag.wheelsize = opts.wheelsize || tag.wheelsize;
         tag.zindex = opts.zindex || tag.zindex;
-        tag.degreestartat = opts.degreestartat || tag.degreestartat;
+
+        if(opts.degreestartat === 0) {
+          tag.degreestartat = 0;
+        }else {
+          tag.degreestartat = opts.degreestartat || tag.degreestartat;
+        }
+
 
         if(opts.mindegree === 0) {
           tag.mindegree = 0;
@@ -257,11 +254,6 @@
         }
 
         knob.trigger(CustomEvent.MOUSE_MOVE);
-      }
-
-      //Return css styling
-      const getComputedStyle = (el, prop) => {
-        return window.getComputedStyle(el).getPropertyValue(prop);
       }
 
       //Calculating x and y coordinates
@@ -367,7 +359,6 @@
       tag.setPropertiesFromOpts = setPropertiesFromOpts;
       tag.angleTo = angleTo;
 
-      tag.getComputedStyle = getComputedStyle;
       tag.getCoordinates = getCoordinates;
       tag.getQuadrant = getQuadrant;
       tag.getRotation = getRotation;

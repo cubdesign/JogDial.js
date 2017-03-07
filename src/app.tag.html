@@ -6,53 +6,30 @@
     </script>
     <h1>JogDial.js</h1>
 
-    <div id="dials">
-        <div class="dial">
-            <jogdial
-                id="jog_dial_one"
-                ref="jog_dial_one"
-                id_name="jog_dial_one"
-                debug={false}
-                wheelsize={'200px'}
-                knobsize={'70px'}
-                mindegree={0}
-                maxdegree={360}
-                degreestartat={0}
-            ></jogdial>
-            <jogdial-meter
-                id="jog_dial_one_meter"
-                ref="jog_dial_one_meter"
-            >
-            </jogdial-meter>
-        </div>
-    </div>
+        <jogdial
+            id="jog_dial_one"
+            ref="jog_dial_one"
+            id_name="jog_dial_one"
+            debug={false}
+            wheelsize={'200px'}
+            knobsize={'70px'}
+            mindegree={0}
+            maxdegree={360}
+            degreestartat={0}
+        ></jogdial>
+
+        <jogdial-meter
+            id="jog_dial_one_meter"
+            ref="jog_dial_one_meter"
+        >
+        </jogdial-meter>
+
     <style>
         app {
-
             display: block;
-
             text-align: center;
             padding: 15px 5px 25px;
             background: #eee;
-        }
-
-        .inline {
-            display: inline-block;
-        }
-
-        #dials {
-            height: 320px;
-            overflow: hidden;
-        }
-
-        .dial {
-            display: block;
-            position: relative;
-            height: 320px;
-        }
-
-        .dial.hidden {
-            display: none;
         }
 
         #jog_dial_one {

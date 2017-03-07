@@ -1,4 +1,4 @@
-<wheel class={debug: debug }>
+<wheel class={debug: debug } style="width:{size};height:{size};z-index:{zindex}">
     <script>
       import DomEvent from '../events/domevent'
     </script>
@@ -64,32 +64,28 @@
         tag.trigger(DomEvent.MOUSE_OUT ,e);
       }
 
-      const setSize = (size) => {
-        tag.root.style.width = size;
-        tag.root.style.height = size;
-      }
 
       /*
        tag properties
 
        opts
-       debug
-       id_name
-
+           debug
+           id_name
+           size
+           zindex
        */
 
       // opt
       tag.debug = Boolean(opts.debug);
       tag.id_name = 'jogdial_2';
-
+      tag.size = opts.size;
+      tag.zindex = opts.zindex;
 
       // method
       tag.mouse_down = mouse_down;
       tag.mouse_move = mouse_move;
       tag.mouse_up = mouse_up;
       tag.mouse_out = mouse_out;
-
-      tag.setSize = setSize;
 
 
       // event listener

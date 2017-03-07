@@ -1,4 +1,10 @@
-<knob class={debug: debug}>
+<knob
+    class={debug: debug}
+    style="width:{ size }; height:{ size }; z-index:{ zindex }; margin:{ margin };"
+>
+    <script>
+
+    </script>
     <style type="scss">
 
         knob {
@@ -26,15 +32,8 @@
         const tag = this;
 
         const onMount = () => {
-          tag.root.style.zIndex = opts.zindex;
+
         };
-
-        const setSize = (size) => {
-          tag.root.style.width = size;
-          tag.root.style.height = size;
-        }
-
-
 
         /*
          tag properties
@@ -42,15 +41,20 @@
          opts
             debug
             id_name
-
+            size
+            zindex
          */
 
         // opt
         tag.debug = Boolean(opts.debug);
         tag.id_name = 'jogdial_2';
+        tag.size = opts.size;
+        tag.zindex = opts.zindex;
 
+        tag.margin = tag.size.replace('px', '') / 2 + 'px';
+        tag.margin = `-${tag.margin} 0 0 -${tag.margin}`;
         // method
-        tag.setSize = setSize;
+
 
         // event listener
         tag.on('mount', onMount);
