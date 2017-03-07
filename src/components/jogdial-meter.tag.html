@@ -1,29 +1,49 @@
 <jogdial-meter class={debug: debug}>
-    <div></div>
-    <style type="scss">
-        jogdial-meter {
-            display: block;
-            width: 200px;
-            height: 10px;
-            margin: 20px auto 30px;
-            background: #999;
-            overflow: hidden;
-            -webkit-border-radius: 5px;
-            -moz-border-radius: 5px;
-            -ms-border-radius: 5px;
-            -o-border-radius: 5px;
-            border-radius: 5px;
-        }
+  <div style="width:{rotation_parsent}%;"></div>
+  <style type="scss">
+    jogdial-meter {
+      display: block;
+      width: 200px;
+      height: 10px;
+      margin: 20px auto 30px;
+      background: #999;
+      overflow: hidden;
+      -webkit-border-radius: 5px;
+      -moz-border-radius: 5px;
+      -ms-border-radius: 5px;
+      -o-border-radius: 5px;
+      border-radius: 5px;
+    }
 
-        jogdial-meter div {
-            position: relative;
-            width: 0;
-            height: 100%;
-            background: #80e93a;
-        }
+    jogdial-meter div {
+      position: relative;
+      width: 0;
+      height: 100%;
+      background: #80e93a;
+    }
 
-    </style>
-    <script>
+  </style>
+  <script>
+    /* Assign this to tag */
 
-    </script>
+    const tag = this;
+
+    const onMount = () => {
+      tag.rotation_parsent = opts.rotation_parsent || 0;
+    }
+    const onUpdate = () => {
+      tag.rotation_parsent = opts.rotation_parsent || 0;
+    }
+
+    tag.on('mount', onMount);
+    tag.on('update', onUpdate);
+    /*
+     tag properties
+
+     opts
+      rotation_parsent
+     */
+
+    tag.rotation_parsent = opts.rotation_parsent || 0;
+  </script>
 </jogdial-meter>

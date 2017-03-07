@@ -21,6 +21,8 @@
         <jogdial-meter
             id="jog_dial_one_meter"
             ref="jog_dial_one_meter"
+            debug={false}
+            rotation_parsent = {jog_dial_one_meter_rotation_parsent}
         >
         </jogdial-meter>
 
@@ -53,11 +55,11 @@
 
     const tag = this;
 
-
     const onWheelMouseMoveEvent = (ev) => {
-      const { jog_dial_one, jog_dial_one_meter } = tag.refs;
-      const rotation_parsent = `${Math.round((jog_dial_one.refs.knob.rotation / 360) * 100)}%`;
-      jog_dial_one_meter.root.style.width = rotation_parsent;
+      const { jog_dial_one } = tag.refs;
+      const rotation_parsent = `${Math.round((jog_dial_one.refs.knob.rotation / 360) * 100)}`;
+      tag.jog_dial_one_meter_rotation_parsent = rotation_parsent;
+      tag.update();
     }
 
     const onMount = () => {
@@ -74,6 +76,13 @@
     tag.on('unmount', onUnMount);
 
 
+    /*
+     tag properties
+
+     opts
+     */
+
+    tag.jog_dial_one_meter_rotation_parsent = 0;
 
     </script>
 </app>
