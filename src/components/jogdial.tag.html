@@ -11,6 +11,7 @@
         import DomEvent from '../events/domevent'
         import CustomEvent from '../events/customevent'
         import MobileEvent from '../events/mobileevent'
+        import JogDialUtil from '../utils/JogDialUtil'
     </script>
     <knob
             ref="knob"
@@ -89,7 +90,7 @@
         wheel.on(DomEvent.MOUSE_OUT, onWheelMouseUpEvent);
 
         // Set angle
-        tag.angleTo(tag.convertClockToUnit(tag.degreestartat));
+        tag.angleTo(JogDialUtil.convertClockToUnit(tag.degreestartat));
 
       };
 
@@ -101,7 +102,7 @@
         switch (tag.touchmode) {
           case 'knob':
           default:
-            tag.pressed = tag.checkBoxCollision(
+            tag.pressed = JogDialUtil.checkBoxCollision(
               {
                 x1: knob.root.offsetLeft - wheel.root.offsetLeft,
                 y1: knob.root.offsetTop - wheel.root.offsetTop,
@@ -138,8 +139,8 @@
           const _x = offset.x - tag.center.x + wheel.root.offsetLeft;
           const _y = offset.y - tag.center.y + wheel.root.offsetTop;
           let radian = Math.atan2(_y, _x) * ToDeg;
-          const quadrant = tag.getQuadrant(_x, _y);
-          let degree = tag.convertUnitToClock(radian);
+          const quadrant = JogDialUtil.getQuadrant(_x, _y);
+          let degree = JogDialUtil.convertUnitToClock(radian);
           let rotation;
 
           //Calculate the current rotation value based on pointer offset
@@ -154,8 +155,8 @@
               info.snapshot.old = Object.assign({}, info.old);
             }
             rotation = tag.maxdegree;
-            radian = tag.convertClockToUnit(rotation);
-            degree = tag.convertUnitToClock(radian);
+            radian = JogDialUtil.convertClockToUnit(rotation);
+            degree = JogDialUtil.convertUnitToClock(radian);
           }
           else if (tag.mindegree != null && tag.mindegree >= rotation) {
             if (info.snapshot.direction == null) {
@@ -164,8 +165,8 @@
               info.snapshot.old = Object.assign({}, info.old);
             }
             rotation = tag.mindegree;
-            radian = tag.convertClockToUnit(rotation);
-            degree = tag.convertUnitToClock(radian);
+            radian = JogDialUtil.convertClockToUnit(rotation);
+            degree = JogDialUtil.convertUnitToClock(radian);
           }
           else if (info.snapshot.direction != null) {
             info.snapshot.direction = null;
@@ -249,7 +250,7 @@
           // Update JogDial data information
           Object.assign(knob, {
             rotation: tag.degreestartat,
-            degree: tag.convertUnitToClock(radian)
+            degree: JogDialUtil.convertUnitToClock(radian)
           });
         }
 
@@ -263,15 +264,6 @@
         const _x = ((MobileEvent) ? e.targetTouches[0].clientX : e.clientX) - rect.left;
         const _y = ((MobileEvent) ? e.targetTouches[0].clientY : e.clientY) - rect.top;
         return { x: _x, y: _y };
-      }
-
-      // Return the current quadrant.
-      // Note: JogDial's Cartesian plane is flipped, hence it's returning reversed value.
-      const getQuadrant = (x, y) => {
-        if (x > 0 && y > 0) return 4;
-        else if (x < 0 && y > 0) return 3;
-        else if (x < 0 && y < 0) return 2;
-        else if (x >= 0 && y < 0) return 1;
       }
 
       // Returne the sum of rotation value
@@ -288,23 +280,6 @@
         info.old.rotation = newDegree; // return 0 ~ 360
         info.old.quadrant = quadrant; // return 1 ~ 4
         return rotation;
-      }
-
-      //Checking collision
-      const checkBoxCollision = (bound, point) => {
-        return bound.x1 < point.x
-          && bound.x2 > point.x
-          && bound.y1 < point.y
-          && bound.y2 > point.y;
-      }
-
-
-      const convertClockToUnit = (n) => {
-        return n % 360 - 90;
-      }
-
-      const convertUnitToClock = (n) => {
-        return (n >= -180 && n < -90 ) ? 450 + n : 90 + n;
       }
 
 
@@ -360,11 +335,7 @@
       tag.angleTo = angleTo;
 
       tag.getCoordinates = getCoordinates;
-      tag.getQuadrant = getQuadrant;
       tag.getRotation = getRotation;
-      tag.checkBoxCollision = checkBoxCollision;
-      tag.convertClockToUnit = convertClockToUnit;
-      tag.convertUnitToClock = convertUnitToClock;
 
       // event listener
       tag.on('before-mount', onBeforeMount);
